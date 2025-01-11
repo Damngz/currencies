@@ -1,0 +1,6 @@
+<button class="btn btn-success" (click)="login()" *ngIf="!isLoggedIn">
+  Iniciar Sesión
+</button>
+<button class="btn btn-outline-secondary" (click)="logout()" *ngIf="isLoggedIn">
+  Cerrar Sesión
+</button>
