@@ -21,6 +21,7 @@ export class LoginComponent implements OnInit {
 
     if (this.isLoggedIn) {
       sessionStorage.setItem('user', account?.username || '');
+      sessionStorage.setItem('token', this.msalService.instance.getActiveAccount()?.idToken || '');
       this.router.navigate(['/currencies']);
     }
   }
@@ -34,6 +35,7 @@ export class LoginComponent implements OnInit {
         this.msalService.instance.setActiveAccount(account);
         this.isLoggedIn = true;
         sessionStorage.setItem('user', this.msalService.instance.getActiveAccount()?.username || '');
+        sessionStorage.setItem('token', this.msalService.instance.getActiveAccount()?.idToken || '');
         this.router.navigate(['/currencies']);
       },
       error: (error) => {

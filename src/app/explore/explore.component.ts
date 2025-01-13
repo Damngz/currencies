@@ -40,8 +40,6 @@ export class ExploreComponent {
 
         return currency;
       });
-
-      console.log(this.currencies);
     });
 
   }

@@ -38,7 +38,6 @@ export class CurrenciesComponent implements OnInit {
               dolarValue$ = this.http.get<any>(`https://mindicador.cl/api/dolar`).toPromise();
             }
             Promise.all([request, dolarValue$]).then(([requestData, dolarData]) => {
-              console.log(requestData, dolarData);
 
               if (currency.dolar === 'Y') {
                 currency.price = requestData.serie[0].valor * dolarData.serie[0].valor;
