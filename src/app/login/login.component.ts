@@ -20,6 +20,7 @@ export class LoginComponent implements OnInit {
     this.isLoggedIn = !!account;
 
     if (this.isLoggedIn) {
+      sessionStorage.setItem('user', account?.username || '');
       this.router.navigate(['/currencies']);
     }
   }
@@ -32,6 +33,7 @@ export class LoginComponent implements OnInit {
         const account = this.msalService.instance.getAllAccounts()[0];
         this.msalService.instance.setActiveAccount(account);
         this.isLoggedIn = true;
+        sessionStorage.setItem('user', this.msalService.instance.getActiveAccount()?.username || '');
         this.router.navigate(['/currencies']);
       },
       error: (error) => {

@@ -1,38 +1,25 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { Currency } from '../models/currency.model';
+import { Observable } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { Currency, CurrencyFavorites } from '../models/currency.model';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CurrencyService {
-  private currencies: Currency[] = [
-    { id: 1, name: 'USD', rate: 1 },
-    { id: 2, name: 'EUR', rate: 0.9 },
-  ];
-  private currenciesSubject = new BehaviorSubject<Currency[]>(this.currencies);
+  private baseUrl = 'http://localhost:8080';
+
+  constructor(private http: HttpClient) {}
 
   getCurrencies(): Observable<Currency[]> {
-    return this.currenciesSubject.asObservable();
+    return this.http.get<Currency[]>(`${this.baseUrl}/currencies`);
   }
 
-  addCurrency(currency: Currency): void {
-    console.log(currency);
-    currency.id = this.currencies.length + 1;
-    this.currencies.push(currency);
-    this.currenciesSubject.next(this.currencies);
+  getUserFavorites(userId: number): Observable<CurrencyFavorites[]> {
+    return this.http.get<CurrencyFavorites[]>(`${this.baseUrl}/favorites/user/${userId}`);
   }
 
-  updateCurrency(updatedCurrency: Currency): void {
-    const index = this.currencies.findIndex(c => c.id === updatedCurrency.id);
-    if (index !== -1) {
-      this.currencies[index] = updatedCurrency;
-      this.currenciesSubject.next(this.currencies);
-    }
-  }
-
-  deleteCurrency(id: number): void {
-    this.currencies = this.currencies.filter(c => c.id !== id);
-    this.currenciesSubject.next(this.currencies);
+  getUserByEmail(email: string): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/users/${email}`);
   }
 }

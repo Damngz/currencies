@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, NgApexchartsModule } from 'ng-apexcharts';
 
 @Component({
@@ -8,6 +8,8 @@ import { ApexAxisChartSeries, ApexChart, ApexXAxis, ApexDataLabels, NgApexcharts
   styleUrl: './chart.component.css'
 })
 export class ChartComponent {
+  @Input() title: string = '';
+
   series: ApexAxisChartSeries = [
     {
       name: "Desempeño",
@@ -23,7 +25,8 @@ export class ChartComponent {
     },
     toolbar: {
       show: false
-    }
+    },
+    height: 400
   };
 
   xaxis: ApexXAxis = {

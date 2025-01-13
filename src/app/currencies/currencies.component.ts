@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { ChartComponent } from '../chart/chart.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-currencies',
@@ -14,26 +15,52 @@ import { NgApexchartsModule } from 'ng-apexcharts';
   styleUrl: './currencies.component.css'
 })
 export class CurrenciesComponent implements OnInit {
-  currencies: Currency[] = [];
-  newCurrency: Currency = { id: 0, name: '', rate: 0 };
+  favoriteCurrencies: Currency[] = [];
+  selectedCurrency: string = 'USD';
+  seriesData: number[] = [];
 
-  constructor(private currencyService: CurrencyService) {}
+  constructor(private currencyService: CurrencyService, private http: HttpClient) {}
 
   ngOnInit(): void {
-    console.log('inicio el currencies')
-    this.currencyService.getCurrencies().subscribe(data => this.currencies = data);
+    const userEmail = sessionStorage.getItem('user');
+
+    if (userEmail) {
+      this.currencyService.getUserByEmail(userEmail).subscribe((user) => {
+        const userId = user.user_id;
+
+        this.currencyService.getUserFavorites(userId).subscribe((favorites) => {
+          
+          this.favoriteCurrencies = favorites.map((favorite) => {
+            const { currency } = favorite;
+            let dolarValue$;
+            const request = this.http.get<any>(`https://mindicador.cl/api/${currency.key_id}`).toPromise();
+            
+            if (currency.dolar === 'Y') {
+              dolarValue$ = this.http.get<any>(`https://mindicador.cl/api/dolar`).toPromise();
+            }
+            Promise.all([request, dolarValue$]).then(([requestData, dolarData]) => {
+              console.log(requestData, dolarData);
+
+              if (currency.dolar === 'Y') {
+                currency.price = requestData.serie[0].valor * dolarData.serie[0].valor;
+              } else {
+                currency.price = requestData.serie[0].valor;
+              }
+
+              currency.rate = requestData.serie[0].valor / requestData.serie[1].valor - 1;
+
+              currency.series = requestData.serie.map((value: { fecha: string; valor: number; }) => value.valor);
+            });
+
+            return currency;
+          });
+        });
+      });
+    }
   }
 
-  addCurrency(): void {
-    this.currencyService.addCurrency({ ...this.newCurrency });
-    this.newCurrency = { id: 0, name: '', rate: 0 };
-  }
-
-  updateCurrency(currency: Currency): void {
-    this.currencyService.updateCurrency(currency);
-  }
-
-  deleteCurrency(id: number): void {
-    this.currencyService.deleteCurrency(id);
+  selectCurrency(name: string, series: number[]): void {
+    this.selectedCurrency = name;
+    this.seriesData = series;
   }
 }

@@ -14,5 +14,10 @@ export const routes: Routes = [
     path: 'currencies',
     loadComponent: () => import('./currencies/currencies.component').then(load => load.CurrenciesComponent),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'explore',
+    loadComponent: () => import('./explore/explore.component').then(load => load.ExploreComponent),
+    canActivate: [AuthGuard]
   }
 ]
