@@ -7,7 +7,7 @@ import { Currency, CurrencyFavorites } from '../models/currency.model';
   providedIn: 'root',
 })
 export class CurrencyService {
-  private baseUrl = 'http://localhost:8080/bff';
+  private baseUrl = 'https://ddt9c6g18h.execute-api.us-east-1.amazonaws.com/v1';
 
   constructor(private http: HttpClient) {}
 
