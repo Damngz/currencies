@@ -17,7 +17,6 @@ import { HttpClient } from '@angular/common/http';
 export class CurrenciesComponent implements OnInit {
   favoriteCurrencies: Currency[] = [];
   selectedCurrency: string = 'USD';
-  seriesData: number[] = [];
 
   constructor(private currencyService: CurrencyService, private http: HttpClient) {}
 
@@ -59,8 +58,7 @@ export class CurrenciesComponent implements OnInit {
     }
   }
 
-  selectCurrency(name: string, series: number[]): void {
+  selectCurrency(name: string): void {
     this.selectedCurrency = name;
-    this.seriesData = series;
   }
 }
