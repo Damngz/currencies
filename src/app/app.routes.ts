@@ -4,11 +4,11 @@ import { AuthGuard } from "./auth.guard";
 export const routes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./login/login.component').then(load => load.LoginComponent)
+    loadComponent: () => import('./home/home.component').then(load => load.HomeComponent)
   },
   {
-    path: 'login',
-    loadComponent: () => import('./login/login.component').then(load => load.LoginComponent)
+    path: 'home',
+    loadComponent: () => import('./home/home.component').then(load => load.HomeComponent)
   },
   {
     path: 'currencies',

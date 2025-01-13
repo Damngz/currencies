@@ -1,4 +1,4 @@
-<nav class="bg-[#17153a]">
+<nav [ngClass]="{'bg-[#17153a]/90': isLoggedIn, 'bg-[#17153a]/50': !isLoggedIn}" class="z-40">
   <div class="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
     <div class="relative flex h-16 items-center justify-between">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -18,7 +18,7 @@
         <div class="flex shrink-0 items-center">
           <img class="h-8 w-auto" src="/logo.svg" alt="Your Company">
         </div>
-        <div class="hidden sm:ml-6 sm:block">
+        <div class="hidden sm:ml-6 sm:block" *ngIf="isLoggedIn">
           <div class="flex space-x-4">
             <a href="/currencies" class="rounded-md bg-gray-900 px-3 py-2 text-sm font-medium text-white" aria-current="page">Currencies</a>
             <a href="/explore" class="rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-gray-700 hover:text-white">Explore</a>
@@ -26,7 +26,13 @@
         </div>
       </div>
       <div class="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
-        <div class="relative ml-3">
+        <button class="bg-[#20204e] py-1 px-3 rounded-md hover:bg-[#191944] active:bg-[#111827] focus:bg-[#111827] hover:cursor-pointer" (click)="logout()" *ngIf="isLoggedIn">
+          <p class="text-white">Cerrar sesión</p>
+        </button>
+        <div class="bg-[#20204e] py-1 px-3 rounded-md hover:bg-[#191944] active:bg-[#111827] focus:bg-[#111827] hover:cursor-pointer" (click)="login()" *ngIf="!isLoggedIn">
+          <p class="text-white">Iniciar sesión</p>
+        </div>
+        <div class="relative ml-3" *ngIf="isLoggedIn">
           <div>
             <button type="button" class="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
               <span class="absolute -inset-1.5"></span>
